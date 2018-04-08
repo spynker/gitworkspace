@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yangbo.mapper.UserMapper">
+	<resultMap id="BaseResult" type="com.yangbo.entity.UserEntity">
+		<id column="id" property="id" jdbcType="BIGINT"/>
+		<result column="userName" property="userName" jdbcType="VARCHAR"/>
+		<result column="passWord" property="passWord" jdbcType="VARCHAR"/>
+		<result column="userSex" property="userSex" javaType="com.yangbo.Enum.UserSex"/>
+		<result column="nickName" property="nickName" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id,userName,passWord,userSex,nickName
+	</sql>
+	
+	<select id="getOne" parameterType="java.lang.Long" resultMap="BaseResult">
+		select <include refid="Base_Column_List"/> from user where id=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="BaseResult">
+		select <include refid="Base_Column_List"/> from user
+	</select>
+	
+	<delete id="delete" parameterType="java.lang.Long">
+		<if test="_parameter != null">
+			delete from user where id=#{_id}
+		</if>
+	</delete>
+	
+	<insert id="save" parameterType="com.yangbo.entity.UserEntity"> 
+		insert into user(userName,passWord,userSex,nickName) values (#{userName},#{passWord},#{userSex},#{nickName})
+	</insert>
+	
+	<update id="update" parameterType="com.yangbo.entity.UserEntity">
+		update user set 
+		<if test="userName !=null">userName=#{userName},</if>
+		<if test="passWord !=passWord">passWord=#{passWord},</if>
+		<if test="userSex !=null">userSex=#{userSex},</if>
+		<if test="nickName!=null">nickName=#{nickName}</if>
+		where id=#{id}
+	</update>
+	
+</mapper>
